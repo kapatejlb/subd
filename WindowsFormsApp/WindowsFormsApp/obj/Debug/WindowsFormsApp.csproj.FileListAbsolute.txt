@@ -1,0 +1,16 @@
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\WindowsFormsApp.exe.config
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\WindowsFormsApp.exe
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\WindowsFormsApp.pdb
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\MySql.Data.dll
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\Google.Protobuf.dll
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\BouncyCastle.Crypto.dll
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\Ubiety.Dns.Core.dll
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\Renci.SshNet.dll
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\bin\Debug\MySql.Data.xml
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.csprojAssemblyReference.cache
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form1.resources
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Properties.Resources.resources
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.csproj.GenerateResource.cache
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.csproj.CopyComplete
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.exe
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.pdb

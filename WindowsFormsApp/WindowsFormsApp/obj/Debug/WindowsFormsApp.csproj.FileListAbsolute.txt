@@ -14,3 +14,5 @@ D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.csp
 D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.csproj.CopyComplete
 D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.exe
 D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.pdb
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form2.resources
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form3.resources

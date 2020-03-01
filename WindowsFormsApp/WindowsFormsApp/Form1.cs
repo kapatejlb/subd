@@ -69,5 +69,10 @@ namespace WindowsFormsApp
                 MessageBox.Show("Query error: " + e.Message);
             }
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

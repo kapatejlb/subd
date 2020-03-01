@@ -83,8 +83,8 @@ namespace WindowsFormsApp
 
             this.Hide();
 
-            Form1 f1 = new Form1();
-            f1.Show();
+            Form4 f4 = new Form4();
+            f4.Show();
 
         }
 
@@ -105,6 +105,11 @@ namespace WindowsFormsApp
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+
+        }
+
+        private void Form3_Load(object sender, EventArgs e)
+        {
 
         }
     }

@@ -45,8 +45,8 @@ namespace WindowsFormsApp
             {
                 this.Hide();
 
-                Form1 f1 = new Form1();
-                f1.Show();
+                Form4 f4 = new Form4();
+                f4.Show();
 
             }
 
@@ -59,6 +59,11 @@ namespace WindowsFormsApp
 
             Form3 f3 = new Form3();
             f3.Show();
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

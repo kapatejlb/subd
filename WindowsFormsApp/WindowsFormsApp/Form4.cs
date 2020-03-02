@@ -321,5 +321,41 @@ namespace WindowsFormsApp
 
 
         }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells[0].Value);
+            int seconds = Convert.ToInt32(textBox1.Text);
+
+            string ev_name = "mydb.User_" + Convert.ToString(id) + "_blocked_on_" + Convert.ToString(seconds);
+            
+            string MySqlConnectionString = "datasource=127.0.0.1;port=3306;username=root;password=11111;database=mydb";
+            MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
+
+            MySqlCommand command4 = new MySqlCommand(
+                "update mydb.human " +
+                "set mydb.human.status = 2 " +
+                "where mydb.human.id = @id ;" +
+
+                "CREATE EVENT IF NOT EXISTS mydb.qwe " +
+                "ON SCHEDULE AT DATE_ADD(NOW(),INTERVAL @sec second) " +
+                "DO " +
+                    "update mydb.human " +
+                    "set mydb.human.status = 1 " +
+                    "where mydb.human.id = @id"
+                , databaseConnection);
+            command4.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
+            command4.Parameters.Add("@ev_name", MySqlDbType.VarChar).Value = ev_name;
+            command4.Parameters.Add("@sec", MySqlDbType.Int32).Value = seconds;
+
+            databaseConnection.Open();
+            command4.ExecuteNonQuery();
+
+        }
     }
 }

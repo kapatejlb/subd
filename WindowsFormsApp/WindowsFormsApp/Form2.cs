@@ -43,6 +43,24 @@ namespace WindowsFormsApp
                 MessageBox.Show("Wrong login or password!");
             else
             {
+                int id = Convert.ToInt32(table.AsEnumerable().ToArray()[0].ItemArray[0]);
+
+
+
+
+                MySqlCommand command322 = new MySqlCommand(
+                    "insert into mydb.jurnal " +
+                    "set mydb.jurnal.DateTime = NOW(), " +
+                    "mydb.jurnal.human_id = @id "        
+                    , databaseConnection);
+
+                command322.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
+
+                databaseConnection.Open();
+                command322.ExecuteNonQuery();
+
+                databaseConnection.Close();
+
                 this.Hide();
 
                 Form4 f4 = new Form4();

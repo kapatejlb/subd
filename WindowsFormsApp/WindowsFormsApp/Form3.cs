@@ -57,6 +57,9 @@ namespace WindowsFormsApp
             "set name3.Name3 = @pat;"        
             , databaseConnection);
 
+            command.Parameters.Add("@fN", MySqlDbType.VarChar).Value = firstName;
+            command.Parameters.Add("@sN", MySqlDbType.VarChar).Value = secondName;
+            command.Parameters.Add("@pat", MySqlDbType.VarChar).Value = Patronymic;
 
 
             MySqlCommand command2 = new MySqlCommand(
@@ -68,9 +71,7 @@ namespace WindowsFormsApp
                 "(select idName3 from mydb.name3 order by mydb.name3.idName3 desc limit 1) as name3) "
             ,databaseConnection);
 
-            command.Parameters.Add("@fN", MySqlDbType.VarChar).Value = firstName;
-            command.Parameters.Add("@sN", MySqlDbType.VarChar).Value = secondName;
-            command.Parameters.Add("@pat", MySqlDbType.VarChar).Value = Patronymic;
+
             command2.Parameters.Add("@log", MySqlDbType.VarChar).Value = login;
             command2.Parameters.Add("@pass", MySqlDbType.Int32).Value = password;
             command2.Parameters.Add("@rol", MySqlDbType.Int32).Value = 1;

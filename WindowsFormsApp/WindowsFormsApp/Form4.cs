@@ -43,7 +43,7 @@ namespace WindowsFormsApp
             MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand command = new MySqlCommand(
-                "select h.id, n1.Name1, n2.Name2, n3.Name3, h.login, h.password, h.status, h.role, h.active " +
+                "select h.id, n1.Name1, n2.Name2, n3.Name3, h.login, h.password, h.status, h.role, h.blockedfrom, h.blockedtill " +
                 "from mydb.human h " +
                 "inner join mydb.name1 n1 on n1.idName1 = h.Name1_idName1 " +
                 "inner join mydb.name2 n2 on n2.idName2 = h.Name2_idName2 " +
@@ -73,6 +73,7 @@ namespace WindowsFormsApp
                     row.ItemArray[6],
                     row.ItemArray[7],
                     row.ItemArray[8],
+                    row.ItemArray[9]
                 });
             }
 
@@ -339,8 +340,11 @@ namespace WindowsFormsApp
 
             MySqlCommand command4 = new MySqlCommand(
                 "update mydb.human " +
-                "set mydb.human.status = 2 " +
-                "where mydb.human.id = @id ;" +
+                "set mydb.human.status = 2 , " +
+                " mydb.human.blockedfrom = DATE_ADD(NOW(),INTERVAL 0 second), " +
+                " mydb.human.blockedtill = DATE_ADD(NOW(),INTERVAL @sec second) " +
+
+                "where mydb.human.id = @id ; " +
 
                 "CREATE EVENT IF NOT EXISTS mydb.qwe " +
                 "ON SCHEDULE AT DATE_ADD(NOW(),INTERVAL @sec second) " +

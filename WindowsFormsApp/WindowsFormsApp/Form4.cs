@@ -501,5 +501,62 @@ namespace WindowsFormsApp
         {
 
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var current = dataGridView1.CurrentRow.Cells;
+
+            int id = Convert.ToInt32(current[0].Value);
+
+            string MySqlConnectionString = "datasource=127.0.0.1;port=3306;username=root;password=11111;database=mydb";
+            MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
+            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            databaseConnection.Open();
+
+            MySqlCommand command = new MySqlCommand(
+                "drop trigger if exists mydb.beforeDeleteBackup; " +
+                "drop trigger if exists mydb.beforeUpdateBackup; " +
+
+
+                "delete from mydb.human " +
+                "where mydb.human.id = @id; " +
+
+                "insert into mydb.human " +
+                "select mydb.humanbackup.id, mydb.humanbackup.Name2_idName2, mydb.humanbackup.Name1_idName1, mydb.humanbackup.Name3_idName3, " +
+                        "mydb.humanbackup.login, mydb.humanbackup.password, mydb.humanbackup.status, mydb.humanbackup.role, " +
+                        "mydb.humanbackup.active, mydb.humanbackup.blockedfrom, mydb.humanbackup.blockedtill " +
+                "from mydb.humanbackup " +
+                "where mydb.humanbackup.id = @id  " +
+                "and mydb.humanbackup.idhumanBackup = (select max(mydb.humanbackup.idhumanBackup) from mydb.humanbackup); " +
+
+                "delete from mydb.humanbackup " +
+                "where mydb.humanbackup.id = @id;  " +
+
+                "create trigger mydb.beforeUpdateBackup  " +
+                "before update on mydb.human for each row  " +
+
+                "INSERT INTO mydb.humanbackup  " +
+                    "(mydb.humanbackup.id, mydb.humanbackup.Name2_idName2, mydb.humanbackup.Name1_idName1, mydb.humanbackup.Name3_idName3,  " +
+                    "mydb.humanbackup.login, mydb.humanbackup.password, mydb.humanbackup.status, mydb.humanbackup.role,  " +
+                    "mydb.humanbackup.active, mydb.humanbackup.blockedfrom, mydb.humanbackup.blockedtill)  " +
+
+                "SELECT * FROM mydb.human WHERE mydb.human.id = old.id;  " +
+
+                "create trigger mydb.beforeDeleteBackup  " +
+                "before delete on mydb.human for each row  " +
+
+                "INSERT INTO mydb.humanbackup  " +
+                    "(mydb.humanbackup.id, mydb.humanbackup.Name2_idName2, mydb.humanbackup.Name1_idName1, mydb.humanbackup.Name3_idName3,  " +
+                    "mydb.humanbackup.login, mydb.humanbackup.password, mydb.humanbackup.status, mydb.humanbackup.role,  " +
+                    "mydb.humanbackup.active, mydb.humanbackup.blockedfrom, mydb.humanbackup.blockedtill)  " +
+
+                "SELECT * FROM mydb.human WHERE mydb.human.id = old.id;  " 
+                , databaseConnection);
+            command.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
+            command.ExecuteNonQuery();
+
+
+
+        }
     }
 }

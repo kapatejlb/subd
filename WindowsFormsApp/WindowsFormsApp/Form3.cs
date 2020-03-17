@@ -22,9 +22,7 @@ namespace WindowsFormsApp
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                string firstName = textBox1.Text;
+            string firstName = textBox1.Text;
                 string secondName = textBox2.Text;
                 string Patronymic = textBox3.Text;
 
@@ -35,53 +33,10 @@ namespace WindowsFormsApp
 
                 string MySqlConnectionString = "datasource=127.0.0.1;port=3306;username=root;password=11111;database=mydb";
                 MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
-                MySqlDataAdapter adapter = new MySqlDataAdapter();
-
-                MySqlCommand command10 = new MySqlCommand(
-                    "select * from mydb.human " +
-                    "where mydb.human.login = @log"
-                    , databaseConnection);
-                command10.Parameters.Add("@log", MySqlDbType.VarChar).Value = login;
-
-                adapter.SelectCommand = command10;
-                DataTable table10 = new DataTable();
-                adapter.Fill(table10);
-
-                MySqlCommand commanddd = new MySqlCommand(
-                "select * from mydb.name1 " +
-                "where mydb.name1.Name1 = @n1"
-                , databaseConnection);
-                commanddd.Parameters.Add("@n1", MySqlDbType.VarChar).Value = firstName;
-
-                adapter.SelectCommand = commanddd;
-                DataTable table100 = new DataTable();
-                adapter.Fill(table100);
-
-                MySqlCommand command15 = new MySqlCommand(
-                "select * from mydb.name2 " +
-                "where mydb.name2.Name2 = @n2"
-                , databaseConnection);
-                command15.Parameters.Add("@n2", MySqlDbType.VarChar).Value = secondName;
-
-                adapter.SelectCommand = command15;
-                DataTable table1000 = new DataTable();
-                adapter.Fill(table1000);
-
-                MySqlCommand command155 = new MySqlCommand(
-                "select * from mydb.name3 " +
-                "where mydb.name3.Name3 = @n3"
-                , databaseConnection);
-                command155.Parameters.Add("@n3", MySqlDbType.VarChar).Value = secondName;
-
-                adapter.SelectCommand = command15;
-                DataTable table10000 = new DataTable();
-                adapter.Fill(table10000);
-
-                //string fn = table10.AsEnumerable().ToArray()[0].ItemArray[4].ToString();
 
 
                 if (firstName == "" || secondName == "" || Patronymic == "" ||
-                    login == "" || password == "" || repPassword == "" || password != repPassword || table10.Rows.Count != 0)
+                    login == "" || password == "" || repPassword == "" || password != repPassword)
 
                 {
                     MessageBox.Show("Whong Input!!! Not all fields are filled or login is already exist о.о");
@@ -91,43 +46,26 @@ namespace WindowsFormsApp
 
                 databaseConnection.Open();
 
-                if (table100.Rows.Count == 0 && table1000.Rows.Count == 0 && table10000.Rows.Count == 0)
-                {
-                    MySqlCommand command = new MySqlCommand(
-                    "insert into mydb.name1 " +
-                    "set name1.Name1 = @fN;" +
 
-                    "insert into mydb.name2 " +
-                    "set name2.Name2 = @sN;" +
+                MySqlCommand command = new MySqlCommand("lock tables mydb.human write, mydb.name1 write, mydb.name2 write, mydb.name3 write; " +
+                                   "call mydb.proc_registration(@fn, @ln, @pat, @act, @log, @pass, @rol, @stat); " +
+                                   "unlock tables; "
+                                   , databaseConnection);
 
-                    "insert into mydb.name3 " +
-                    "set name3.Name3 = @pat;"
-                    , databaseConnection);
-
-                    command.Parameters.Add("@fN", MySqlDbType.VarChar).Value = firstName;
-                    command.Parameters.Add("@sN", MySqlDbType.VarChar).Value = secondName;
-                    command.Parameters.Add("@pat", MySqlDbType.VarChar).Value = Patronymic;
-                    command.ExecuteNonQuery();
-                }
-
-
-                MySqlCommand command2 = new MySqlCommand(
-                    "insert into mydb.human(mydb.human.Name1_idName1, mydb.human.Name2_idName2, mydb.human.Name3_idName3, " +
-                    "mydb.human.active, mydb.human.login, mydb.human.password, mydb.human.role, mydb.human.status) " +
-                    "select name1.idName1, name2.idName2, name3.idName3, 1, @log, @pass, @rol, 1 from( " +
-                    "(select idName1 from mydb.name1 order by mydb.name1.idName1 desc limit 1) as name1, " +
-                    "(select idName2 from mydb.name2 order by mydb.name2.idName2 desc limit 1) as name2, " +
-                    "(select idName3 from mydb.name3 order by mydb.name3.idName3 desc limit 1) as name3) "
-                , databaseConnection);
-
-
-                command2.Parameters.Add("@log", MySqlDbType.VarChar).Value = login;
-                command2.Parameters.Add("@pass", MySqlDbType.Int32).Value = password;
-                command2.Parameters.Add("@rol", MySqlDbType.Int32).Value = 1;
+                command.Parameters.Add("@fn", MySqlDbType.VarChar).Value = firstName;
+                command.Parameters.Add("@ln", MySqlDbType.VarChar).Value = secondName;
+                command.Parameters.Add("@pat", MySqlDbType.VarChar).Value = Patronymic;
+                command.Parameters.Add("@act", MySqlDbType.Int32).Value = 1;
+                command.Parameters.Add("@log", MySqlDbType.VarChar).Value = login;
+                command.Parameters.Add("@pass", MySqlDbType.Int32).Value = Convert.ToInt32(password);
+                command.Parameters.Add("@rol", MySqlDbType.Int32).Value = 1;
+                command.Parameters.Add("@stat", MySqlDbType.Int32).Value = 1;
 
 
 
-                command2.ExecuteNonQuery();
+
+
+            command.ExecuteNonQuery();
 
                 //adapter.InsertCommand = command;
 
@@ -135,12 +73,10 @@ namespace WindowsFormsApp
 
                 Form4 f4 = new Form4();
                 f4.Show();
-            }
-            catch(Exception)
-            {
-                MessageBox.Show("Whong Input!!! Not all fields are filled or login is already exist о.о");
-                return;
-            }
+
+                
+            
+
 
         }
 

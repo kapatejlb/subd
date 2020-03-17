@@ -28,7 +28,9 @@ namespace WindowsFormsApp
 
             MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
             MySqlDataAdapter adapter = new MySqlDataAdapter();
-            MySqlCommand command = new MySqlCommand("select * from mydb.human where human.login = @uL and human.password = @uP", databaseConnection);
+            MySqlCommand command = new MySqlCommand(" " +
+                                                    " call mydb.proc_login(@uL, @uP); " +
+                                                    " ", databaseConnection);
             command.Parameters.Add("@uL", MySqlDbType.VarChar).Value = userName;
             command.Parameters.Add("@uP", MySqlDbType.Int32).Value = userPassword;
 
@@ -43,23 +45,7 @@ namespace WindowsFormsApp
                 MessageBox.Show("Wrong login or password!");
             else
             {
-                int id = Convert.ToInt32(table.AsEnumerable().ToArray()[0].ItemArray[0]);
 
-
-
-
-                MySqlCommand command322 = new MySqlCommand(
-                    "insert into mydb.jurnal " +
-                    "set mydb.jurnal.DateTime = NOW(), " +
-                    "mydb.jurnal.human_id = @id "        
-                    , databaseConnection);
-
-                command322.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
-
-                databaseConnection.Open();
-                command322.ExecuteNonQuery();
-
-                databaseConnection.Close();
 
                 this.Hide();
 

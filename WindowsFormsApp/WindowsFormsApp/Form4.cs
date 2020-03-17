@@ -32,6 +32,37 @@ namespace WindowsFormsApp
 
         private void Form4_Load(object sender, EventArgs e)
         {
+            string MySqlConnectionString = "datasource=127.0.0.1;port=3306;username=root;password=11111;database=mydb";
+            MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
+            databaseConnection.Open();
+
+            MySqlCommand command = new MySqlCommand(
+                "drop trigger if exists mydb.beforeDeleteBackup; " +
+                "drop trigger if exists mydb.beforeUpdateBackup; " +
+
+                "create trigger mydb.beforeUpdateBackup  " +
+                "before update on mydb.human for each row  " +
+
+                "INSERT INTO mydb.humanbackup  " +
+                    "(mydb.humanbackup.id, mydb.humanbackup.Name2_idName2, mydb.humanbackup.Name1_idName1, mydb.humanbackup.Name3_idName3,  " +
+                    "mydb.humanbackup.login, mydb.humanbackup.password, mydb.humanbackup.status, mydb.humanbackup.role,  " +
+                    "mydb.humanbackup.active, mydb.humanbackup.blockedfrom, mydb.humanbackup.blockedtill)  " +
+
+                "SELECT * FROM mydb.human WHERE mydb.human.id = old.id;  " +
+
+                "create trigger mydb.beforeDeleteBackup  " +
+                "before delete on mydb.human for each row  " +
+
+                "INSERT INTO mydb.humanbackup  " +
+                    "(mydb.humanbackup.id, mydb.humanbackup.Name2_idName2, mydb.humanbackup.Name1_idName1, mydb.humanbackup.Name3_idName3,  " +
+                    "mydb.humanbackup.login, mydb.humanbackup.password, mydb.humanbackup.status, mydb.humanbackup.role,  " +
+                    "mydb.humanbackup.active, mydb.humanbackup.blockedfrom, mydb.humanbackup.blockedtill)  " +
+
+                "SELECT * FROM mydb.human WHERE mydb.human.id = old.id;  "
+                , databaseConnection);
+            command.ExecuteNonQuery();
+
+
             UpdateTable();
         }
 
@@ -113,11 +144,10 @@ namespace WindowsFormsApp
 
             string MySqlConnectionString = "datasource=127.0.0.1;port=3306;username=root;password=11111;database=mydb";
             MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
             databaseConnection.Open();
 
             MySqlCommand command = new MySqlCommand(
-                "delete from mydb.human where mydb.human.id = @id "
+                " call mydb.proc_delete(@id); "
                 , databaseConnection);
 
             command.Parameters.Add("@id", MySqlDbType.Int32).Value = Convert.ToInt32(id);
@@ -147,143 +177,8 @@ namespace WindowsFormsApp
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             databaseConnection.Open();
 
-            MySqlCommand command = new MySqlCommand(
-                "select * from mydb.name1 " +
-                "where mydb.name1.Name1 = @fN"
-                , databaseConnection);
+            
 
-
-             MySqlCommand command2 = new MySqlCommand(
-                "select * from mydb.name2 " +
-                "where mydb.name2.Name2 = @sN"
-                , databaseConnection);
-
-             MySqlCommand command3 = new MySqlCommand(
-                "select * from mydb.name3 " +
-                "where mydb.name3.Name3 = @pat"
-                , databaseConnection);
-
-            command.Parameters.Add("@fN", MySqlDbType.VarChar).Value = firstName;
-            command2.Parameters.Add("@sN", MySqlDbType.VarChar).Value = secondName;
-            command3.Parameters.Add("@pat", MySqlDbType.VarChar).Value = Patronymic;
-
-            string newName = "", newSecName = "", newPatr = "";
-
-            adapter.SelectCommand = command;
-            DataTable table1= new DataTable();
-            adapter.Fill(table1);
-            if(table1.Rows.Count == 0)
-            {
-                MySqlCommand command4 = new MySqlCommand(
-                "insert into mydb.name1 " +
-                "set name1.Name1 = @fN;"
-                ,databaseConnection);
-                command4.Parameters.Add("@fN", MySqlDbType.VarChar).Value = firstName;
-                //databaseConnection.Open();
-                command4.ExecuteNonQuery();
-            }
-            else
-            {
-                newName = table1.AsEnumerable().ToArray()[0].ItemArray[0].ToString();
-            }
-
-            adapter.SelectCommand = command2;
-            DataTable table2 = new DataTable(); 
-            adapter.Fill(table2);
-            if (table2.Rows.Count == 0)
-            {
-                MySqlCommand command5 = new MySqlCommand(
-                "insert into mydb.name2 " +
-                "set name2.Name2 = @sN;"
-                , databaseConnection);
-                command5.Parameters.Add("@sN", MySqlDbType.VarChar).Value = secondName;
-                //databaseConnection.Open();
-                command5.ExecuteNonQuery();
-            }
-            else
-            {
-                newSecName = table2.AsEnumerable().ToArray()[0].ItemArray[0].ToString();
-            }
-
-            adapter.SelectCommand = command3;
-            DataTable table3 = new DataTable();
-            adapter.Fill(table3);
-            if (table3.Rows.Count == 0)
-            {
-                MySqlCommand command6 = new MySqlCommand(
-                "insert into mydb.name3 " +
-                "set name3.Name3 = @pat;"
-                , databaseConnection);
-                command6.Parameters.Add("@pat", MySqlDbType.VarChar).Value = Patronymic;
-                //databaseConnection.Open();
-                command6.ExecuteNonQuery();
-            }
-            else
-            {
-                newPatr = table3.AsEnumerable().ToArray()[0].ItemArray[0].ToString();
-            }
-
-            //databaseConnection.Open();
-            //command.ExecuteNonQuery();
-
-            string fn, sn, pat;
-
-            if(newName != "")
-            {
-                fn = newName;
-            }
-            else
-            {
-                MySqlCommand command10 = new MySqlCommand(
-                "select * from mydb.name1 " +
-                "where mydb.name1.Name1 = @fN"
-                , databaseConnection);
-                command10.Parameters.Add("@fN", MySqlDbType.VarChar).Value = firstName;
-
-                adapter.SelectCommand = command;
-                DataTable table10 = new DataTable();
-                adapter.Fill(table10);
-
-                fn = table10.AsEnumerable().ToArray()[0].ItemArray[0].ToString();
-            }
-            if (newSecName != "")
-            {
-                sn = newSecName;
-            }
-            else
-            {
-                MySqlCommand command10 = new MySqlCommand(
-                "select * from mydb.name2 " +
-                "where mydb.name2.Name2 = @sN"
-                , databaseConnection);
-                command10.Parameters.Add("@sN", MySqlDbType.VarChar).Value = secondName;
-
-                adapter.SelectCommand = command;
-                DataTable table11 = new DataTable();
-                adapter.Fill(table11);
-
-                sn = table11.AsEnumerable().ToArray()[0].ItemArray[0].ToString();
-            }
-            if (newPatr != "")
-            {
-                pat = newPatr;
-            }
-            else
-            {
-                MySqlCommand command10 = new MySqlCommand(
-                "select * from mydb.name3 " +
-                "where mydb.name3.Name3 = @pat"
-                , databaseConnection);
-                command.Parameters.Add("@pat", MySqlDbType.VarChar).Value = Patronymic;
-
-                adapter.SelectCommand = command;
-                DataTable table12 = new DataTable();
-                adapter.Fill(table12);
-
-                pat = table12.AsEnumerable().ToArray()[0].ItemArray[0].ToString();
-            }
-
-            string id = current[0].Value.ToString();
             string login = current[4].Value.ToString();
 
             string password = current[5].Value.ToString();
@@ -291,28 +186,22 @@ namespace WindowsFormsApp
             string role = current[7].Value.ToString();
 
 
-            MySqlCommand command20 = new MySqlCommand(
-                "update mydb.human " +
-                "set mydb.human.Name1_idName1 = @n1, " +
-                "mydb.human.Name2_idName2 = @n2, " +
-                "mydb.human.Name3_idName3 = @n3, " +
-                "mydb.human.login = @l, " +
-                "mydb.human.password = @p, " +
-                "mydb.human.role = @r, " +
-                "mydb.human.status = @s, " +
-                "mydb.human.active = @a " +
-                "where mydb.human.id = @id"
+            MySqlCommand command20 = new MySqlCommand("lock tables mydb.human write, mydb.name1 write, mydb.name2 write, mydb.name3 write; " +
+                "call mydb.proc_update(@id, @n1, @n2, @n3, @a, @l, @p, @r, @s); " +
+                "unlock tables;"
+
             , databaseConnection);
 
-            command20.Parameters.Add("@n1", MySqlDbType.Int32).Value = fn;
-            command20.Parameters.Add("@n2", MySqlDbType.Int32).Value = sn;
-            command20.Parameters.Add("@n3", MySqlDbType.Int32).Value = pat;
+            command20.Parameters.Add("@id", MySqlDbType.Int32).Value = Convert.ToUInt32(current[0].Value);
+            command20.Parameters.Add("@n1", MySqlDbType.VarChar).Value = firstName;
+            command20.Parameters.Add("@n2", MySqlDbType.VarChar).Value = secondName;
+            command20.Parameters.Add("@n3", MySqlDbType.VarChar).Value = Patronymic;
             command20.Parameters.Add("@l", MySqlDbType.VarChar).Value = login;
             command20.Parameters.Add("@p", MySqlDbType.VarChar).Value = password;
-            command20.Parameters.Add("@r", MySqlDbType.VarChar).Value = role;
-            command20.Parameters.Add("@s", MySqlDbType.VarChar).Value = status;
-            command20.Parameters.Add("@a", MySqlDbType.VarChar).Value = "1";
-            command20.Parameters.Add("@id", MySqlDbType.Int32).Value = Convert.ToUInt32(current[0].Value);
+            command20.Parameters.Add("@r", MySqlDbType.Int32).Value = 1;
+            command20.Parameters.Add("@s", MySqlDbType.Int32).Value = 1;
+            command20.Parameters.Add("@a", MySqlDbType.Int32).Value = 1;
+            
 
 
 
@@ -339,22 +228,20 @@ namespace WindowsFormsApp
             MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
 
             MySqlCommand command4 = new MySqlCommand(
-                "update mydb.human " +
-                "set mydb.human.status = 2 , " +
-                " mydb.human.blockedfrom = DATE_ADD(NOW(),INTERVAL 0 second), " +
-                " mydb.human.blockedtill = DATE_ADD(NOW(),INTERVAL @sec second) " +
 
-                "where mydb.human.id = @id ; " +
+                "lock tables mydb.human write; " +
+
+                "call mydb.proc_timeblock(@id, @sec); " +
 
                 "CREATE EVENT IF NOT EXISTS mydb.qwe " +
                 "ON SCHEDULE AT DATE_ADD(NOW(),INTERVAL @sec second) " +
                 "DO " +
                     "update mydb.human " +
                     "set mydb.human.status = 1 " +
-                    "where mydb.human.id = @id"
+                    "where mydb.human.id = @id ; " +
+                    " unlock tables; "
                 , databaseConnection);
             command4.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
-            command4.Parameters.Add("@ev_name", MySqlDbType.VarChar).Value = ev_name;
             command4.Parameters.Add("@sec", MySqlDbType.Int32).Value = seconds;
 
             databaseConnection.Open();
@@ -514,9 +401,14 @@ namespace WindowsFormsApp
             databaseConnection.Open();
 
             MySqlCommand command = new MySqlCommand(
+
+                " lock tables mydb.human write; " +
+                " lock tables mydb.humanbackup write; "+
+
                 "drop trigger if exists mydb.beforeDeleteBackup; " +
                 "drop trigger if exists mydb.beforeUpdateBackup; " +
 
+                
 
                 "delete from mydb.human " +
                 "where mydb.human.id = @id; " +
@@ -550,7 +442,9 @@ namespace WindowsFormsApp
                     "mydb.humanbackup.login, mydb.humanbackup.password, mydb.humanbackup.status, mydb.humanbackup.role,  " +
                     "mydb.humanbackup.active, mydb.humanbackup.blockedfrom, mydb.humanbackup.blockedtill)  " +
 
-                "SELECT * FROM mydb.human WHERE mydb.human.id = old.id;  " 
+                "SELECT * FROM mydb.human WHERE mydb.human.id = old.id;  " +
+                
+                " unlock tables; "
                 , databaseConnection);
             command.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
             command.ExecuteNonQuery();

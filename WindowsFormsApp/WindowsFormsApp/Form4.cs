@@ -256,82 +256,23 @@ namespace WindowsFormsApp
             MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
             MySqlDataAdapter adapter = new MySqlDataAdapter();
 
-            StringBuilder str = new StringBuilder ("select h.id, n1.Name1, n2.Name2, n3.Name3, h.login, h.password, h.status, h.role, h.active " +
-                "from mydb.human h " +
-                "inner join mydb.name1 n1 on n1.idName1 = h.Name1_idName1 " +
-                "inner join mydb.name2 n2 on n2.idName2 = h.Name2_idName2 " +
-                "inner join mydb.name3 n3 on n3.idName3 = h.Name3_idName3 where h.id is not null " );
-
-            if (textBox4.Text != "")
-            {                
-                str.Append(" and h.id =  @id ");
-            }
-            if (textBox7.Text != "")
-            {
-                str.Append(" and n1.Name1 =  @fn ");
-            }
-            if (textBox2.Text != "")
-            {
-                str.Append(" and n2.Name2 = @ln ");       
-            }
-            if (textBox3.Text != "")
-            {
-                str.Append(" and n3.Name3 = @pat ");
-            }
-            if (textBox6.Text != "")
-            {
-                str.Append(" and h.login = @log ");
-            }
-
-            if (textBox5.Text != "")
-            {
-                str.Append(" and h.status = @stat ");
-            }
-            if (comboBox1.Text != "")
-            {
-                str.Append(" and h.role = @rol");
-            }
-
-            MySqlCommand command = new MySqlCommand(str.ToString(), databaseConnection);
-
-            if (textBox4.Text != "")
-            {
-                command.Parameters.Add("@id", MySqlDbType.Int32).Value = Convert.ToInt32(textBox4.Text);
-            }
-
-            
-            if(textBox7.Text != "")
-                command.Parameters.Add("@fn", MySqlDbType.VarChar).Value = textBox7.Text;
-
-            if(textBox2.Text != "")
-                command.Parameters.Add("@ln", MySqlDbType.VarChar).Value = textBox2.Text;
-            
-
-            if(textBox3.Text!= "")
-                command.Parameters.Add("@pat", MySqlDbType.VarChar).Value = textBox3.Text;
+            MySqlCommand command = new MySqlCommand("call mydb.proc_search(@id, @fn, @ln, @pat, @log, @stat, @rol); ", databaseConnection);
 
 
-            if (textBox6.Text != "")
-            {
-                command.Parameters.Add("@log", MySqlDbType.VarChar).Value = textBox6.Text;
-            }
-            if (textBox5.Text != "")
-            {
-                command.Parameters.Add("@stat", MySqlDbType.VarChar).Value = textBox5.Text;
-            }
-            if (comboBox1.Text != "")
-            {
-                command.Parameters.Add("@rol", MySqlDbType.VarChar).Value = comboBox1.Text;
-            }
+            command.Parameters.Add("@id", MySqlDbType.Int32).Value = Convert.ToInt32(textBox4.Text);
+            command.Parameters.Add("@fn", MySqlDbType.VarChar).Value = textBox7.Text;
+            command.Parameters.Add("@ln", MySqlDbType.VarChar).Value = textBox2.Text;
+            command.Parameters.Add("@pat", MySqlDbType.VarChar).Value = textBox3.Text;
+            command.Parameters.Add("@log", MySqlDbType.VarChar).Value = textBox6.Text;
+            command.Parameters.Add("@stat", MySqlDbType.VarChar).Value = textBox5.Text;
+            command.Parameters.Add("@rol", MySqlDbType.VarChar).Value = comboBox1.Text;
+
 
             adapter.SelectCommand = command;
             DataTable table11 = new DataTable();
             adapter.Fill(table11);
 
             dataGridView1.Rows.Clear();
-
-            var tableeee = table11.AsEnumerable().ToArray();
-            
 
             foreach (var row in table11.AsEnumerable())
             {

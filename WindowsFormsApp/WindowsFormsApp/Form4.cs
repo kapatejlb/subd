@@ -74,11 +74,7 @@ namespace WindowsFormsApp
             MySqlConnection databaseConnection = new MySqlConnection(MySqlConnectionString);
             MySqlDataAdapter adapter = new MySqlDataAdapter();
             MySqlCommand command = new MySqlCommand(
-                "select h.id, n1.Name1, n2.Name2, n3.Name3, h.login, h.password, h.status, h.role, h.blockedfrom, h.blockedtill " +
-                "from mydb.human h " +
-                "inner join mydb.name1 n1 on n1.idName1 = h.Name1_idName1 " +
-                "inner join mydb.name2 n2 on n2.idName2 = h.Name2_idName2 " +
-                "inner join mydb.name3 n3 on n3.idName3 = h.Name3_idName3 ",
+                "call proc_refreshTable();",
                 databaseConnection
                 );
 
@@ -229,17 +225,17 @@ namespace WindowsFormsApp
 
             MySqlCommand command4 = new MySqlCommand(
 
-                "lock tables mydb.human write; " +
+                " " +
 
                 "call mydb.proc_timeblock(@id, @sec); " +
 
-                "CREATE EVENT IF NOT EXISTS mydb.qwe " +
+                "CREATE EVENT IF NOT EXISTS mydb.qffllwe " +
                 "ON SCHEDULE AT DATE_ADD(NOW(),INTERVAL @sec second) " +
                 "DO " +
                     "update mydb.human " +
                     "set mydb.human.status = 1 " +
                     "where mydb.human.id = @id ; " +
-                    " unlock tables; "
+                    " "
                 , databaseConnection);
             command4.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
             command4.Parameters.Add("@sec", MySqlDbType.Int32).Value = seconds;
@@ -392,6 +388,22 @@ namespace WindowsFormsApp
 
 
 
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+
+            Form5 f5 = new Form5();
+            f5.Show();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+
+            Form6 f6 = new Form6();
+            f6.Show();
         }
     }
 }

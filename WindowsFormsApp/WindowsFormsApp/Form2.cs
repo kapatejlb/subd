@@ -41,8 +41,31 @@ namespace WindowsFormsApp
 
             //MessageBox.Show(Convert.ToString(table.Rows.Count));
 
+            //foreach (var row in table11.AsEnumerable())
+            //{
+            //    dataGridView1.Rows.Add(
+            //    new object[]
+            //    {
+            //        row.ItemArray[0],
+
+            //        row.ItemArray[1],
+            //        row.ItemArray[2],
+            //        row.ItemArray[3],
+
+            //        row.ItemArray[4],
+            //        row.ItemArray[5],
+            //        row.ItemArray[6],
+            //        row.ItemArray[7],
+            //        row.ItemArray[8],
+            //    });
+
+ //           var qwe = table.AsEnumerable().ToArray()[0].ItemArray[6];
             if (table.Rows.Count == 0)
-                MessageBox.Show("Wrong login or password!");
+            MessageBox.Show("Wrong login or password!");
+            else if (table.AsEnumerable().ToArray()[0].ItemArray[6].ToString() == "not active")
+            {
+                MessageBox.Show("BLOCKED!!!!!!!");
+            }
             else
             {
 

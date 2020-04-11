@@ -46,7 +46,6 @@ namespace WindowsFormsApp
 
                 databaseConnection.Open();
 
-
                 MySqlCommand command = new MySqlCommand("lock tables mydb.human write, mydb.name1 write, mydb.name2 write, mydb.name3 write; " +
                                    "call mydb.proc_registration(@fn, @ln, @pat, @act, @log, @pass, @rol, @stat); " +
                                    "unlock tables; "
@@ -61,10 +60,6 @@ namespace WindowsFormsApp
                 command.Parameters.Add("@rol", MySqlDbType.Int32).Value = 1;
                 command.Parameters.Add("@stat", MySqlDbType.Int32).Value = 1;
 
-
-
-
-
             command.ExecuteNonQuery();
 
                 //adapter.InsertCommand = command;
@@ -73,11 +68,6 @@ namespace WindowsFormsApp
 
                 Form4 f4 = new Form4();
                 f4.Show();
-
-                
-            
-
-
         }
 
         private void button2_Click_1(object sender, EventArgs e)

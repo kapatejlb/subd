@@ -17,3 +17,5 @@ D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.pdb
 D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form2.resources
 D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form3.resources
 D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form4.resources
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form5.resources
+D:\studies\6sem\db\WindowsFormsApp\WindowsFormsApp\obj\Debug\WindowsFormsApp.Form6.resources
